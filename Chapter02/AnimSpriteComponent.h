@@ -9,6 +9,12 @@
 #pragma once
 #include "SpriteComponent.h"
 #include <vector>
+typedef struct {
+	int begin;
+	int end;
+	bool wrap;
+}animRange;
+
 class AnimSpriteComponent : public SpriteComponent
 {
 public:
@@ -16,15 +22,18 @@ public:
 	// Update animation every frame (overridden from component)
 	void Update(float deltaTime) override;
 	// Set the textures used for animation
-	void SetAnimTextures(const std::vector<SDL_Texture*>& textures);
+	void SetAnimTextures(const std::vector<SDL_Texture*>& textures, std::vector<animRange>& animRanges);
 	// Set/get the animation FPS
 	float GetAnimFPS() const { return mAnimFPS; }
 	void SetAnimFPS(float fps) { mAnimFPS = fps; }
+	void SetAnimCurRange(int range) { mAnimCurRange = range; }
 private:
 	// All textures in the animation
 	std::vector<SDL_Texture*> mAnimTextures;
+	std::vector<animRange> mAnimRanges;
 	// Current frame displayed
 	float mCurrFrame;
 	// Animation frame rate
 	float mAnimFPS;
+	int mAnimCurRange;
 };

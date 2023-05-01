@@ -33,6 +33,9 @@ private:
 	void ProcessInput();
 	void UpdateGame();
 	void GenerateOutput();
+	void MovePaddle(Vector2& paddle, int dir, float deltaTime);
+	void PaddleBallCollision(Vector2& ballPos, Vector2& ballVel);
+	void Paddle2BallCollision(Vector2& ballPos, Vector2& ballVel);
 
 	// Window created by SDL
 	SDL_Window* mWindow;
@@ -46,10 +49,14 @@ private:
 	// Pong specific
 	// Direction of paddle
 	int mPaddleDir;
+	int mPaddle2Dir;
 	// Position of paddle
 	Vector2 mPaddlePos;
+	Vector2 mPaddle2Pos;
 	// Position of ball
 	Vector2 mBallPos;
+	Vector2 mBall2Pos;
 	// Velocity of ball
 	Vector2 mBallVel;
+	Vector2 mBall2Vel;
 };

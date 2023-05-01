@@ -36,6 +36,8 @@ public:
 	void SetScale(float scale) { mScale = scale; }
 	float GetRotation() const { return mRotation; }
 	void SetRotation(float rotation) { mRotation = rotation; }
+	void SetAction(int action) { mAction = action; }
+	int GetAction() { return mAction; }
 
 	State GetState() const { return mState; }
 	void SetState(State state) { mState = state; }
@@ -49,7 +51,7 @@ public:
 private:
 	// Actor's state
 	State mState;
-
+	int mAction;
 	// Transform
 	Vector2 mPosition;
 	float mScale;
