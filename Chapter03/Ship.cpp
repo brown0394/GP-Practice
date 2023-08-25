@@ -9,30 +9,71 @@
 #include "Ship.h"
 #include "SpriteComponent.h"
 #include "InputComponent.h"
-#include "Game.h"
 #include "Laser.h"
+#include "CircleComponent.h"
+#include "Asteroid.h"
+
+#define STARTPOS Vector2(512.0f, 384.0f)
 
 Ship::Ship(Game* game)
 	:Actor(game)
 	,mLaserCooldown(0.0f)
+	,mUnpauseCooldown(0.0f)
 {
 	// Create a sprite component
-	SpriteComponent* sc = new SpriteComponent(this, 150);
-	sc->SetTexture(game->GetTexture("Assets/Ship.png"));
+	texture = game->GetTexture("Assets/Ship.png");
+	sc = new SpriteComponent(this, 150);
+	sc->SetTexture(texture);
 
 	// Create an input component and set keys/speed
-	InputComponent* ic = new InputComponent(this);
+	ic = new InputComponent(this);
 	ic->SetForwardKey(SDL_SCANCODE_W);
 	ic->SetBackKey(SDL_SCANCODE_S);
 	ic->SetClockwiseKey(SDL_SCANCODE_A);
 	ic->SetCounterClockwiseKey(SDL_SCANCODE_D);
 	ic->SetMaxForwardSpeed(300.0f);
 	ic->SetMaxAngularSpeed(Math::TwoPi);
+
+	mCircle = new CircleComponent(this);
+	mCircle->SetRadius(40.0f);
+
+	componentsErased = false;
+}
+
+void Ship::reUseComponents() {
+	this->SetPosition(STARTPOS);
+	sc = new SpriteComponent(this, 150);
+	sc->SetTexture(texture);
+	this->AddComponent(ic);
+	componentsErased = false;
+}
+
+void Ship::eraseComponents() {
+	this->RemoveComponent(sc);
+	delete sc;
+	sc = nullptr;
+	this->RemoveComponent(ic);
+	componentsErased = true;
 }
 
 void Ship::UpdateActor(float deltaTime)
 {
 	mLaserCooldown -= deltaTime;
+	mUnpauseCooldown -= deltaTime;
+	if (mUnpauseCooldown < 0.0f) {
+		if (componentsErased) {
+			reUseComponents();
+		}
+		for (auto ast : GetGame()->GetAsteroids())
+		{
+			if (Intersect(*mCircle, *(ast->GetCircle())))
+			{
+				mUnpauseCooldown = 0.5f;
+				this->eraseComponents();
+				break;
+			}
+		}
+	}
 }
 
 void Ship::ActorInput(const uint8_t* keyState)

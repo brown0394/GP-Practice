@@ -13,7 +13,7 @@ class MoveComponent : public Component
 {
 public:
 	// Lower update order to update first
-	MoveComponent(class Actor* owner, int updateOrder = 10);
+	MoveComponent(class Actor* owner, bool bounded = false, int updateOrder = 10);
 
 	void Update(float deltaTime) override;
 	
@@ -26,4 +26,5 @@ private:
 	float mAngularSpeed;
 	// Controls forward movement (units/second)
 	float mForwardSpeed;
+	bool isBounded;
 };

@@ -10,7 +10,7 @@
 #include "Actor.h"
 
 InputComponent::InputComponent(class Actor* owner)
-:MoveComponent(owner)
+:MoveComponent(owner, true)
 ,mForwardKey(0)
 ,mBackKey(0)
 ,mClockwiseKey(0)

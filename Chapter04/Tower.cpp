@@ -9,6 +9,7 @@
 #include "Tower.h"
 #include "SpriteComponent.h"
 #include "MoveComponent.h"
+#include "AIComponent.h"
 #include "Game.h"
 #include "Enemy.h"
 #include "Bullet.h"
